@@ -1,25 +1,38 @@
 import Stack
 
 
-def par_checker(sym_string):
-    balanced = True
-    index = 0
+def par_matcher(str):
     s = Stack.Stack()
-    while index < len(sym_string) and balanced:
-        symbol = sym_string[index]
-        if symbol == '(':
-            s.push(symbol)
+    if len(str) == 0:
+        return False
+    index = 0
+    balanced = True
+    while index < len(str) and balanced:
+
+        if allowed_open(str[index]) > -1:
+            s.push(str[index])
+
+        elif allowed_close(str[index]) > -1:
+            s.pop()
+
         else:
-            if s.is_empty():
-                balanced = False
-            else:
-                s.pop()
-        index = index + 1
-    if balanced and s.is_empty():
+            balanced = False
+
+        index += 1
+
+    if s.size() == 0 and balanced:
         return True
+
     else:
         return False
 
 
-print par_checker("((()))()")
-print par_checker("(()()))")
+def allowed_open(c):
+    return "([{".find(c)
+
+
+def allowed_close(c):
+    return ")]}".find(c)
+
+
+print par_matcher("{({[[()]]}[]([]))}")
