@@ -1,38 +1,36 @@
 import Stack
 
 
-def par_matcher(str):
+def par_matcher(str_val):
     s = Stack.Stack()
-    if len(str) == 0:
-        return False
-    index = 0
     balanced = True
-    while index < len(str) and balanced:
-
-        if allowed_open(str[index]) > -1:
-            s.push(str[index])
-
-        elif allowed_close(str[index]) > -1:
+    index = 0
+    while index < len(str_val) and balanced:
+        if valid(str_val[index], 0):
+            s.push(str_val[index])
+        elif valid(str_val[index], 1) and is_equal(s.peek(), str_val[index]):
             s.pop()
-
         else:
             balanced = False
-
         index += 1
 
-    if s.size() == 0 and balanced:
+    if balanced and s.is_empty():
         return True
-
     else:
         return False
 
 
-def allowed_open(c):
-    return "([{".find(c)
+def is_equal(o, c):
+    l_open = ['{', '[', '(']
+    l_close = ['}', ']', ')']
+    return l_open.index(o) == l_close.index(c)
 
 
-def allowed_close(c):
-    return ")]}".find(c)
+def valid(v, t):
+    if t == 0:
+        return False if "{[(".find(v) == -1 else True
+    else:
+        return False if "}])".find(v) == -1 else True
 
 
-print par_matcher("{({[[()]]}[]([]))}")
+print par_matcher("[({})]")
